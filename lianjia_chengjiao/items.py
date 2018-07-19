@@ -20,3 +20,6 @@ class LianjiaChengjiaoItem(scrapy.Item):
     house_final_price_per_square = scrapy.Field()
     price_changed_count = scrapy.Field()
     house_deal_time = scrapy.Field()
+    house_direction = scrapy.Field()
+    house_has_elevator = scrapy.Field()
+    house_position = scrapy.Field()
