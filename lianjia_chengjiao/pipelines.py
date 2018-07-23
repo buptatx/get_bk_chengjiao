@@ -4,6 +4,7 @@ import codecs
 import json
 import pymysql
 import time
+import settings
 
 # Define your item pipelines here
 #
@@ -37,25 +38,37 @@ class LianjiaDBPipeline(object):
         self.cursor = self.connect.cursor()
 
     def process_item(self, item, spider):
+        rep = ""
         try:
-            self.cursor.excute("select * from tbl_house_info where house_detail_link='%s'" 
+            self.cursor.execute("select * from tbl_house_info where link='%s'" 
                 % item["house_detail_link"])
-            rep = self.curcor.fetchone()
+            rep = self.cursor.fetchone()
         except Exception as error:
-            print("select error " + error)
-            self.cursor.close()
-            self.connect.close()
+            print("select error " + str(error))
             
-        if not rep:
+        if rep == "":
             try:
-                mexec = "insert into tbl_house_info () value`"
-                self.cursor.execute(mexec)
-                self.connect.commit()
+                if "--" in item["house_size"]:
+                    house_size = 0
+                else:
+                    house_size = float(item["house_size"].split(u"平米")[0])
+                    pps = int(item["house_final_price_per_square"])
+                    pcc = int(item["price_changed_count"])
+                    hp = float(item["house_hangout_price"])
+                    fp = float(item["house_final_price"])
+                    mquery = "insert into tbl_house_info (location,layout,position,haselevator,pricepers,dealtime,"\
+                        "size,direction,changecount,hangout,final,link) "\
+                        "values ('%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', %d, %.2f, %.2f, '%s')" % (
+                        item["house_location"], item["house_layout"], item["house_position"], 
+                        item["house_has_elevator"], pps, item["house_deal_time"], house_size, item["house_direction"],
+                        pcc, hp, fp, item["house_detail_link"])
+                    self.cursor.execute(mquery)
+                    self.connect.commit()
             except Exception as error:
-                print("insert error" + error)
-                self.cursor.close()
-                self.connect.close()
+                print("insert error" + str(error))
 
+        return item
+
+    def spider_closed(self, spider):
         self.cursor.close()
         self.connect.close()
-        return item
