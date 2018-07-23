@@ -17,7 +17,7 @@ SPIDER_MODULES = ['lianjia_chengjiao.spiders']
 NEWSPIDER_MODULE = 'lianjia_chengjiao.spiders'
 
 MYSQL_HOST = 'localhost'
-MYSQL_DBNAME = 'myscrapy'
+MYSQL_DBNAME = '4scrapy'
 MYSQL_USER = 'zhangpeng'
 MYSQL_PASSWD = 'zp001'
 
@@ -75,6 +75,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'lianjia_chengjiao.pipelines.LianjiaChengjiaoPipeline': 300,
+   'lianjia_chengjiao.pipelines.LianjiaDBPipeline':299,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
