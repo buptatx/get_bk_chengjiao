@@ -26,6 +26,14 @@ class LianjiaChengjiao(scrapy.Spider):
             house_item["house_layout"] = info_tmp[1]
             house_item["house_size"] = info_tmp[2]
             house_item["house_deal_time"] = item.css("div.address div.dealDate::text").extract_first()
+            house_item["house_position"] = item.css("div.flood div.positionInfo::text").extract_first()
+            house_info = item.css("div.address div.houseInfo::text").extract_first()
+            temp = house_info.split("|")
+            house_item["house_direction"] = temp[0].strip()
+            if len(temp) != 3:
+                house_item["house_has_elevator"] = u"暂无数据"
+            else:
+                house_item["house_has_elevator"] = temp[2].strip()
 
             deal_company = item.css("div.flood div.source::text").extract_first()
             print("deal company:" + deal_company)
@@ -83,20 +91,30 @@ class LianjiaChengjiao(scrapy.Spider):
             house_item["house_layout"] = info_tmp[1]
             house_item["house_size"] = info_tmp[2]
             house_item["house_deal_time"] = item.css("div.address div.dealDate::text").extract_first()
+            house_item["house_deal_time"] = item.css("div.address div.dealDate::text").extract_first()
+            house_item["house_position"] = item.css("div.flood div.positionInfo::text").extract_first()
+            house_info = item.css("div.address div.houseInfo::text").extract_first()
+            temp = house_info.split("|")
+            house_item["house_direction"] = temp[0]
+            if len(temp) != 3:
+                house_item["house_has_elevator"] = u"暂无数据"
+            else:
+                house_item["house_has_elevator"] = temp[2]
 
             deal_company = item.css("div.flood div.source::text").extract_first()
             print("deal company:" + deal_company)
 
+            print(json.dumps(dict(house_item), encoding="utf-8", ensure_ascii=False))
             #判断是否需要进入详情页面获取成交信息
             if deal_company == u"其他公司成交":
                 house_item["house_hangout_price"] = 0
                 house_item["house_final_price"] = 0
                 house_item["house_final_price_per_square"] = 0
                 house_item["price_changed_count"] = 0
-                print(json.dumps(dict(house_item), encoding="utf-8", ensure_ascii=False))
-            #     yield house_item
+                #print(json.dumps(dict(house_item), encoding="utf-8", ensure_ascii=False))
+                #yield house_item
             else:
                 print("go to " + house_item["house_detail_link"])
-            #     yield scrapy.Request(url=house_item["house_detail_link"], meta={'item' : house_item}, callback=self.parse_cj_detail)
+                #yield scrapy.Request(url=house_item["house_detail_link"], meta={'item' : house_item}, callback=self.parse_cj_detail)
 
         
