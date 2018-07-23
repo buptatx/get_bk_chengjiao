@@ -55,6 +55,7 @@ class LianjiaChengjiao(scrapy.Spider):
         cur_page = int(page_info["curPage"])
         base_url = response.css("div.house-lst-page-box::attr(page-url)").extract_first()
         if cur_page < total_page:
+        #if cur_page < 2:
             next_page = "".join(["https://bj.ke.com", base_url[:-7], str(cur_page + 1)])
             yield scrapy.Request(url=next_page, callback=self.parse_cj_list)
 
