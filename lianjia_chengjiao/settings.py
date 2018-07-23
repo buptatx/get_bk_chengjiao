@@ -16,6 +16,10 @@ BOT_NAME = 'lianjia_chengjiao'
 SPIDER_MODULES = ['lianjia_chengjiao.spiders']
 NEWSPIDER_MODULE = 'lianjia_chengjiao.spiders'
 
+MYSQL_HOST = 'localhost'
+MYSQL_DBNAME = 'myscrapy'
+MYSQL_USER = 'zhangpeng'
+MYSQL_PASSWD = 'zp001'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
